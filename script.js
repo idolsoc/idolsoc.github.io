@@ -331,9 +331,55 @@ function getSong() {
     console.log("Current Int after: " + currentInt);
 }
 
-function randomSong() {
+function getRandomSong() {
 
-    const memTab = document.getElementById("member-table");
+    const memTab = document.getElementById("member-table");   
+
+    const randInt = Math.floor(Math.random() * document.getElementById('sheet').rows.length);
+
+    const songName = document.getElementById('song-name');
+    const songURL = document.getElementById('song-url');
+    
+    const ranSong = document.getElementById('sheet').rows[randInt].cells[1].textContent;
+    const ranURL = document.getElementById('sheet').rows[randInt].cells[3].textContent;
+    songURL.innerHTML = "<a href='" + ranURL + "'>" + ranSong + "</a>";
+    
+    console.log(document.getElementById('sheet').rows[randInt].cells[3].textContent);
+
+    const thumbnailContainer = document.getElementById('song-container');
+
+    let videoId = '';
+
+    if (songURL.textContent.includes('&')) 
+    {
+        videoId = getSubstring(songURL.textContent, 'v=', '&');
+        console.log(videoId);
+    }
+    else if(songURL.textContent.includes("v=")) 
+    {
+        videoId = songURL.textContent.split('v=')[1];
+    }
+    else if(songURL.textContent.includes("ab_channel"))
+    {
+        videoId = getSubstring(songURL.textContent, 'v=', '&ab')
+    }
+    else if(songURL.textContent.includes("&list"))
+    {
+        videoId = getSubstring(songURL.textContent, 'v=', '&list')
+    }
+    else
+    {
+        videoId = getSubstring(songURL.textContent, 'e/', '?');
+        console.log(videoId);
+    }
+
+    const thumbnailURL = `http://img.youtube.com/vi/${videoId}/0.jpg`;
+
+    document.getElementById('song-image').src = thumbnailURL;
+    document.getElementById('song-image').style.display = 'block';
+
+    console.log("Random song selected: " + ranSong, "Random URL selected: " + ranURL);
+
 }
 
 function skipMember() {
