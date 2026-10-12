@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 
+<!--whenever adding new song have to refresh page
+//need option to skip someone
+//better to have dropdown menu for song selection
+//randomise song-->
+
+
 <html>
     <head>
         <title>idol list</title>
@@ -28,6 +34,8 @@
             <input type="text" class="input-field" id="input" placeholder="choose song..." name="song"  oninput="displayChoice()"><br>
 
             <input class="button" type="button" value="submit" id="submit-song" onclick="getSong()"/>
+            <input class="button" type="button" value="random song" id="random-song" onclick="getRandomSong()"/>
+            <input class="button" type="button" value="skip" id="skip-member" onclick="skipMember()"/>
         </div>
 
         <div class="normal">

@@ -331,6 +331,16 @@ function getSong() {
     console.log("Current Int after: " + currentInt);
 }
 
+function randomSong() {
+
+    const memTab = document.getElementById("member-table");
+}
+
+function skipMember() {
+
+    const memTab = document.getElementById("member-table");
+}
+
 function openLinks() {
     const memTable = document.getElementById("member-table");
     const rows = memTable.querySelectorAll('tr');
