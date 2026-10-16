@@ -384,7 +384,7 @@ function getRandomSong() {
 
 function skipMember() {
 
-    const memTab = document.getElementById("member-table");
+    
 }
 
 function openLinks() {
