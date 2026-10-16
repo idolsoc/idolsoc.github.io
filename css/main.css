@@ -45,6 +45,13 @@ p {
   text-align: center;
 }
 
+.note {
+  color: #d93858;
+  display: inline-block;
+  text-align: center;
+  font-size: 60%;
+}
+
 ul {
   color: #230101;
   list-style-position: inside;
