@@ -1,11 +1,12 @@
 membersSelected = new Array();
 shuffledMems = new Array();
+skippedMems = new Array();
 
 const tempTable = document.getElementById("member-table");
 var doc = document.getElementById("member-table");
 
 function loadPage() {
-   
+
     console.log("loading page");
 
     if (sessionStorage.getItem('tempTable') === null) {
@@ -113,19 +114,19 @@ function searchTable() {
 
 function displayChoice() {
 
-    
+
     const songName = document.getElementById('song-name');
     const songURL = document.getElementById('song-url');
     const searchInput = document.getElementById('input');
-    
+
     if (searchInput != null) {
         const searchTable = document.getElementById('sheet');
         const rows = searchTable.querySelectorAll('tr');
-        
-        
+
+
         searchInput.addEventListener('input', function (e) {
             const q = e.target.value.toLowerCase();
-            
+
             rows.forEach(row => {
                 const cells = Array.from(row.querySelectorAll('td'));
                 const matchString = cells.map((n) => n.textContent.toLowerCase()).join(' ');
@@ -133,7 +134,7 @@ function displayChoice() {
                 row.classList.toggle("hide", !isMatch);
             });
         });
-        
+
         for (var i = 0, row; row = searchTable.rows[i]; i++) {
             if (row.cells[1].textContent.toLowerCase() === searchInput.value.toLowerCase()) {
                 songName.textContent = row.cells[1].textContent;
@@ -144,34 +145,29 @@ function displayChoice() {
                         console.log(row.cells[3].textContent);
 
                         const thumbnailContainer = document.getElementById('song-container');
-                
+
                         let videoId = '';
-                
-                        if (songURL.textContent.includes('&')) 
-                        {
+
+                        if (songURL.textContent.includes('&')) {
                             videoId = getSubstring(songURL.textContent, 'v=', '&');
                             console.log(videoId);
                         }
-                        else if(songURL.textContent.includes("v=")) 
-                        {
+                        else if (songURL.textContent.includes("v=")) {
                             videoId = songURL.textContent.split('v=')[1];
                         }
-                        else if(songURL.textContent.includes("ab_channel"))
-                        {
+                        else if (songURL.textContent.includes("ab_channel")) {
                             videoId = getSubstring(songURL.textContent, 'v=', '&ab')
                         }
-                        else if(songURL.textContent.includes("&list"))
-                        {
+                        else if (songURL.textContent.includes("&list")) {
                             videoId = getSubstring(songURL.textContent, 'v=', '&list')
                         }
-                        else
-                        {
+                        else {
                             videoId = getSubstring(songURL.textContent, 'e/', '?');
                             console.log(videoId);
                         }
-                
+
                         const thumbnailURL = `http://img.youtube.com/vi/${videoId}/0.jpg`;
-                
+
                         document.getElementById('song-image').src = thumbnailURL;
                         document.getElementById('song-image').style.display = 'block';
                     }
@@ -246,7 +242,7 @@ function toggleForm() {
         content.style.display = "block";
     }
 };
-    
+
 
 function shuffle(array) {
 
@@ -325,8 +321,30 @@ function getSong() {
     }
 
     currentInt++;
-    memberName.textContent = shuffledMems[currentInt];
+    if (currentInt >= shuffledMems.length && skippedMems.length === 0) {
+        currentInt = 0;
+        memberName.textContent = "done";
+        console.log("Current Int after: " + currentInt);
+    }
+    else if (currentInt < shuffledMems.length) {
+        memberName.textContent = shuffledMems[currentInt];
+    }
+    else if (currentInt >= shuffledMems.length && skippedMems.length > 0) {
+        console.log("Skipped Members: " + skippedMems.length);
+        for (var i = 0; i < skippedMems.length; i++) {
+            memberName.textContent = skippedMems[i];
+            
+        }
+    }
     console.log("Current Int after: " + currentInt);
+
+    // if (skippedMems.length > 0) {
+    //     console.log("Skipped Members: " + skippedMems.length);
+    //     for (var i = 0; i < skippedMems.length; i++) {
+
+    //         memberName.textContent = skippedMems[i];
+    //     }
+    // }
 }
 
 function getRandomSong() {
@@ -335,7 +353,7 @@ function getRandomSong() {
 
     const songURL = document.getElementById('song-url');
     const songName = document.getElementById('song-name');
-    
+
     const ranSong = document.getElementById('sheet').rows[randInt].cells[1].textContent;
     const ranURL = document.getElementById('sheet').rows[randInt].cells[3].textContent;
     songURL.innerHTML = "<a href='" + ranURL + "'>" + ranURL + "</a>";
@@ -343,24 +361,19 @@ function getRandomSong() {
 
     songName.textContent = ranSong;
 
-    if (ranURL.includes('&')) 
-    {
+    if (ranURL.includes('&')) {
         videoId = getSubstring(ranURL, 'v=', '&');
     }
-    else if(ranURL.includes("v=")) 
-    {
+    else if (ranURL.includes("v=")) {
         videoId = ranURL.split('v=')[1];
     }
-    else if(ranURL.includes("ab_channel"))
-    {
+    else if (ranURL.includes("ab_channel")) {
         videoId = getSubstring(ranURL, 'v=', '&ab')
     }
-    else if(ranURL.includes("&list"))
-    {
+    else if (ranURL.includes("&list")) {
         videoId = getSubstring(ranURL, 'v=', '&list')
     }
-    else
-    {
+    else {
         videoId = getSubstring(ranURL, 'e/', '?');
         console.log(videoId);
     }
@@ -376,7 +389,20 @@ function getRandomSong() {
 
 function skipMember() {
 
-    
+    const shuffledMems = JSON.parse(sessionStorage.getItem("shuffledMems"));
+
+    for (var i = 0; i < shuffledMems.length; i++) {
+        console.log(shuffledMems[i]);
+    }
+
+    const memberName = document.getElementById("member-name");
+
+    skippedMems.push(memberName.textContent);
+
+    currentInt++;
+
+    memberName.textContent = shuffledMems[currentInt];
+
 }
 
 function openLinks() {
@@ -431,11 +457,11 @@ async function fetchMembers() {
     }
 }
 
-if(document.title === "members") {
+if (document.title === "members") {
     // Call the function to fetch and display data
     document.addEventListener('DOMContentLoaded', fetchMembers);
 }
-else if(document.title === "song archive" || "index") {
+else if (document.title === "song archive" || "index") {
     // Call the function to fetch and display data
     document.addEventListener('DOMContentLoaded', fetchGoogleSheetData);
 }
