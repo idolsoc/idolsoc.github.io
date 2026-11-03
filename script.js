@@ -303,9 +303,6 @@ let currentInt = 0;
 
 function getSong() {
 
-    const memTab = document.getElementById("member-table");   
-
-    const searchInput = document.getElementById('input');
     const songName = document.getElementById('song-name');
     const songURL = document.getElementById('song-url');
 
@@ -333,11 +330,8 @@ function getSong() {
 
 function getRandomSong() {
 
-    const memTab = document.getElementById("member-table");   
-
     const randInt = Math.floor(Math.random() * document.getElementById('sheet').rows.length);
 
-    const songName = document.getElementById('song-name');
     const songURL = document.getElementById('song-url');
     
     const ranSong = document.getElementById('sheet').rows[randInt].cells[1].textContent;
@@ -346,30 +340,25 @@ function getRandomSong() {
     
     console.log(document.getElementById('sheet').rows[randInt].cells[3].textContent);
 
-    const thumbnailContainer = document.getElementById('song-container');
-
-    let videoId = '';
-
-    if (songURL.textContent.includes('&')) 
+    if (ranURL.includes('&')) 
     {
-        videoId = getSubstring(songURL.textContent, 'v=', '&');
-        console.log(videoId);
+        videoId = getSubstring(ranURL, 'v=', '&');
     }
-    else if(songURL.textContent.includes("v=")) 
+    else if(ranURL.includes("v=")) 
     {
-        videoId = songURL.textContent.split('v=')[1];
+        videoId = ranURL.split('v=')[1];
     }
-    else if(songURL.textContent.includes("ab_channel"))
+    else if(ranURL.includes("ab_channel"))
     {
-        videoId = getSubstring(songURL.textContent, 'v=', '&ab')
+        videoId = getSubstring(ranURL, 'v=', '&ab')
     }
-    else if(songURL.textContent.includes("&list"))
+    else if(ranURL.includes("&list"))
     {
-        videoId = getSubstring(songURL.textContent, 'v=', '&list')
+        videoId = getSubstring(ranURL, 'v=', '&list')
     }
     else
     {
-        videoId = getSubstring(songURL.textContent, 'e/', '?');
+        videoId = getSubstring(ranURL, 'e/', '?');
         console.log(videoId);
     }
 
