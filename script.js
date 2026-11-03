@@ -338,7 +338,7 @@ function getRandomSong() {
     
     const ranSong = document.getElementById('sheet').rows[randInt].cells[1].textContent;
     const ranURL = document.getElementById('sheet').rows[randInt].cells[3].textContent;
-    songURL.textContent = ranURL;
+    songURL.innerHTML = "<a href='" + ranURL + "'>" + ranURL + "</a>";
     console.log(document.getElementById('sheet').rows[randInt].cells[3].textContent);
 
     songName.textContent = ranSong;
