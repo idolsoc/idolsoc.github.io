@@ -314,12 +314,13 @@ function getSong() {
 
     console.log("Current Int before: " + currentInt);
 
-    const rows = memTable.querySelectorAll('tr');
-
     for (var i = 0, row; row = memTable.rows[i]; i++) {
         if (row.cells[0].textContent.toLowerCase() === memberName.textContent.toLowerCase()) {
             const newCell = row.insertCell(1);
             newCell.innerHTML = "<a href='" + songURL.textContent + "'>" + songName.textContent + "</a>";
+
+            console.log(songName.textContent);
+            console.log(songURL.textContent);
         }
     }
 
@@ -333,12 +334,14 @@ function getRandomSong() {
     const randInt = Math.floor(Math.random() * document.getElementById('sheet').rows.length);
 
     const songURL = document.getElementById('song-url');
+    const songName = document.getElementById('song-name');
     
     const ranSong = document.getElementById('sheet').rows[randInt].cells[1].textContent;
     const ranURL = document.getElementById('sheet').rows[randInt].cells[3].textContent;
-    songURL.innerHTML = "<a href='" + ranURL + "'>" + ranSong + "</a>";
-    
+    songURL.textContent = ranURL;
     console.log(document.getElementById('sheet').rows[randInt].cells[3].textContent);
+
+    songName.textContent = ranSong;
 
     if (ranURL.includes('&')) 
     {
